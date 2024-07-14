@@ -1,5 +1,11 @@
 import json
+import os
+from decimal import Decimal
+
+import ijson
 import torch
+
+
 def extract_activations(prompt, tokens, latent_activations, top_k=32):
     activations_dict = {}
     prompt_key = prompt  # 根据需要设置不同的 prompt 标识符
@@ -28,13 +34,22 @@ def extract_activations(prompt, tokens, latent_activations, top_k=32):
     return activations_dict
 
 
+def decimal_default(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError
+
 def update_json_file(filename, new_activations):
+    activations_dict = {}
     # 尝试读取现有的 JSON 文件
     try:
         with open(filename, "r") as json_file:
-            activations_dict = json.load(json_file)
+            parser = ijson.items(json_file, '')
+            for item in parser:
+                activations_dict.update(item)
+                break
     except FileNotFoundError:
-        activations_dict = {}
+        pass
 
     # 合并新激活值到现有字典中
     for new_feature_key, new_feature_data in new_activations.items():
@@ -49,7 +64,7 @@ def update_json_file(filename, new_activations):
 
     # 保存更新后的字典到 JSON 文件
     with open(filename, "w") as json_file:
-        json.dump(activations_dict, json_file, indent=4)
+        json.dump(activations_dict, json_file, indent=4, default=decimal_default)
 
 
 def count_activations(filename):
