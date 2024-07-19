@@ -5,22 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b1e82a92-1e79-4c92-b6ba-f84edff19706" name="Changes" comment="updated cleaned_mbti.csv">
-      <change afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_1000.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_1000.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_1000.parquet" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_50.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_50.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_50.parquet" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/MBTI/data_clean.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/MBTI/data_clean.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/MBTI/exported_data.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/MBTI/gpt2_sae_mbti.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/MBTI/gpt2_sae_mbti.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/MBTI/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/MBTI/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
     </list>
-    <list id="8e943a86-f133-4efa-8e2f-8251924ca805" name="Changes by zhush" comment="">
-      <change beforePath="$PROJECT_DIR$/experiments/mongodb_config.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/mongodb_config.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/test.ipynb" afterDir="false" />
-    </list>
+    <list id="8e943a86-f133-4efa-8e2f-8251924ca805" name="Changes by zhush" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -200,7 +188,7 @@
       <workItem from="1720924443938" duration="12976000" />
       <workItem from="1721311284458" duration="1416000" />
       <workItem from="1721314433704" duration="7191000" />
-      <workItem from="1721328726621" duration="2509000" />
+      <workItem from="1721328726621" duration="3749000" />
     </task>
     <task id="LOCAL-00001" summary="updated activation extract to json format">
       <option name="closed" value="true" />
