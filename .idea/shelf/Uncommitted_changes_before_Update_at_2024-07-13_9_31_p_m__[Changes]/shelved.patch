@@ -1,0 +1,424 @@
+Index: Experiments/utils.py
+===================================================================
+diff --git a/Experiments/utils.py b/Experiments/utils.py
+deleted file mode 100644
+--- a/Experiments/utils.py	(revision 38e98adb009ce1c2e133fd93824d2193084a4461)
++++ /dev/null	(revision 38e98adb009ce1c2e133fd93824d2193084a4461)
+@@ -1,71 +0,0 @@
+-import json
+-import torch
+-
+-def extract_activations(prompt, tokens, latent_activations, top_k=32):
+-    activations_dict = {}
+-    prompt_key = prompt  # 根据需要设置不同的 prompt 标识符
+-
+-    # 遍历所有 feature
+-    for feature_index in range(latent_activations.shape[1]):
+-        # 获取该 feature 的所有激活值
+-        feature_activations = latent_activations[:, feature_index]
+-
+-        # 仅提取 top k 非零激活值
+-        non_zero_activations = feature_activations[feature_activations != 0]
+-        if non_zero_activations.numel() == 0:
+-            continue
+-
+-        top_k_values, top_k_indices = torch.topk(non_zero_activations, min(top_k, non_zero_activations.numel()))
+-
+-        # 构建特征激活字典
+-        feature_key = f"Feature {feature_index}"
+-        activations_dict[feature_key] = {prompt_key: {}}
+-
+-        for value, index in zip(top_k_values, top_k_indices):
+-            token_index = (feature_activations == value).nonzero(as_tuple=True)[0].item()
+-            token = tokens[token_index]
+-            activations_dict[feature_key][prompt_key][f"{token}"] = value.item()
+-
+-    return activations_dict
+-
+-
+-def update_json_file(filename, new_activations):
+-    # 尝试读取现有的 JSON 文件
+-    try:
+-        with open(filename, "r") as json_file:
+-            activations_dict = json.load(json_file)
+-    except FileNotFoundError:
+-        activations_dict = {}
+-
+-    # 合并新激活值到现有字典中
+-    for new_feature_key, new_feature_data in new_activations.items():
+-        if new_feature_key not in activations_dict:
+-            activations_dict[new_feature_key] = new_feature_data
+-        else:
+-            for new_prompt_key, new_prompt_data in new_feature_data.items():
+-                if new_prompt_key not in activations_dict[new_feature_key]:
+-                    activations_dict[new_feature_key][new_prompt_key] = new_feature_data[new_prompt_key]
+-                else:
+-                    activations_dict[new_feature_key][new_prompt_key].update(new_feature_data[new_prompt_key])
+-
+-    # 保存更新后的字典到 JSON 文件
+-    with open(filename, "w") as json_file:
+-        json.dump(activations_dict, json_file, indent=4)
+-
+-
+-def count_activations(filename):
+-    try:
+-        with open(filename, "r") as json_file:
+-            activations_dict = json.load(json_file)
+-    except FileNotFoundError:
+-        print(f"File {filename} not found.")
+-        return 0
+-
+-    activation_count = 0
+-
+-    # 遍历 JSON 结构，统计激活值的数量
+-    for feature_key, feature_data in activations_dict.items():
+-        for prompt_key, prompt_data in feature_data.items():
+-            activation_count += len(prompt_data)
+-
+-    return activation_count
+\ No newline at end of file
+Index: Experiments/MBTI/gpt2_sae_mbti.ipynb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n \"cells\": [\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"id\": \"3a264bdc49ea2966\",\r\n   \"metadata\": {\r\n    \"ExecuteTime\": {\r\n     \"end_time\": \"2024-07-13T03:02:34.783752Z\",\r\n     \"start_time\": \"2024-07-13T03:02:34.737204Z\"\r\n    }\r\n   },\r\n   \"source\": [\r\n    \"# 设置环境变量\\n\",\r\n    \"import os\\n\",\r\n    \"os.environ[\\\"HF_ENDPOINT\\\"] = \\\"https://hf-mirror.com\\\"\\n\",\r\n    \"# 导入库\\n\",\r\n    \"import torch\\n\",\r\n    \"import blobfile as bf\\n\",\r\n    \"import transformer_lens\\n\",\r\n    \"import sparse_autoencoder\\n\",\r\n    \"from experiments.utils import extract_activations, update_json_file, count_activations\\n\",\r\n    \"import json\"\r\n   ],\r\n   \"outputs\": [\r\n    {\r\n     \"ename\": \"ModuleNotFoundError\",\r\n     \"evalue\": \"No module named 'blobfile'\",\r\n     \"output_type\": \"error\",\r\n     \"traceback\": [\r\n      \"\\u001B[1;31m---------------------------------------------------------------------------\\u001B[0m\",\r\n      \"\\u001B[1;31mModuleNotFoundError\\u001B[0m                       Traceback (most recent call last)\",\r\n      \"Cell \\u001B[1;32mIn[2], line 7\\u001B[0m\\n\\u001B[0;32m      5\\u001B[0m \\u001B[38;5;66;03m# 导入库\\u001B[39;00m\\n\\u001B[0;32m      6\\u001B[0m \\u001B[38;5;28;01mimport\\u001B[39;00m \\u001B[38;5;21;01mtorch\\u001B[39;00m\\n\\u001B[1;32m----> 7\\u001B[0m \\u001B[38;5;28;01mimport\\u001B[39;00m \\u001B[38;5;21;01mblobfile\\u001B[39;00m \\u001B[38;5;28;01mas\\u001B[39;00m \\u001B[38;5;21;01mbf\\u001B[39;00m\\n\\u001B[0;32m      8\\u001B[0m \\u001B[38;5;28;01mimport\\u001B[39;00m \\u001B[38;5;21;01mtransformer_lens\\u001B[39;00m\\n\\u001B[0;32m      9\\u001B[0m \\u001B[38;5;28;01mimport\\u001B[39;00m \\u001B[38;5;21;01msparse_autoencoder\\u001B[39;00m\\n\",\r\n      \"\\u001B[1;31mModuleNotFoundError\\u001B[0m: No module named 'blobfile'\"\r\n     ]\r\n    }\r\n   ],\r\n   \"execution_count\": 2\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 6,\r\n   \"id\": \"2ae2db09\",\r\n   \"metadata\": {},\r\n   \"outputs\": [],\r\n   \"source\": [\r\n    \"# 加载模型\\n\",\r\n    \"def load_model(model_name, center_writing_weights=False):\\n\",\r\n    \"    model = transformer_lens.HookedTransformer.from_pretrained(model_name, center_writing_weights=center_writing_weights)\\n\",\r\n    \"    device = next(model.parameters()).device\\n\",\r\n    \"    return model, device\\n\",\r\n    \"\\n\",\r\n    \"# 处理输入\\n\",\r\n    \"def process_input(model, prompt):\\n\",\r\n    \"    tokens_id = model.to_tokens(prompt)  # (1, n_tokens)\\n\",\r\n    \"    tokens_str = model.to_str_tokens(prompt)\\n\",\r\n    \"    with torch.no_grad():\\n\",\r\n    \"        logits, activation_cache = model.run_with_cache(tokens_id, remove_batch_dim=True)\\n\",\r\n    \"    return tokens_id, tokens_str, activation_cache\\n\",\r\n    \"\\n\",\r\n    \"# 提取激活\\n\",\r\n    \"def get_activation(activation_cache, layer_index=6, location=\\\"resid_post_mlp\\\"):\\n\",\r\n    \"    transformer_lens_loc = {\\n\",\r\n    \"        \\\"mlp_post_act\\\": f\\\"blocks.{layer_index}.mlp.hook_post\\\",\\n\",\r\n    \"        \\\"resid_delta_attn\\\": f\\\"blocks.{layer_index}.hook_attn_out\\\",\\n\",\r\n    \"        \\\"resid_post_attn\\\": f\\\"blocks.{layer_index}.hook_resid_mid\\\",\\n\",\r\n    \"        \\\"resid_delta_mlp\\\": f\\\"blocks.{layer_index}.hook_mlp_out\\\",\\n\",\r\n    \"        \\\"resid_post_mlp\\\": f\\\"blocks.{layer_index}.hook_resid_post\\\",\\n\",\r\n    \"    }[location]\\n\",\r\n    \"    return activation_cache[transformer_lens_loc]\\n\",\r\n    \"\\n\",\r\n    \"# 加载自编码器\\n\",\r\n    \"def load_autoencoder(location, layer_index, device):\\n\",\r\n    \"    with bf.BlobFile(sparse_autoencoder.paths.v5_32k(location, layer_index), mode=\\\"rb\\\") as f:\\n\",\r\n    \"        state_dict = torch.load(f)\\n\",\r\n    \"        autoencoder = sparse_autoencoder.Autoencoder.from_state_dict(state_dict)\\n\",\r\n    \"        autoencoder.to(device)\\n\",\r\n    \"    return autoencoder\\n\",\r\n    \"\\n\",\r\n    \"# 编码和解码激活张量\\n\",\r\n    \"def encode_decode(autoencoder, input_tensor):\\n\",\r\n    \"    with torch.no_grad():\\n\",\r\n    \"        latent_activations, info = autoencoder.encode(input_tensor)\\n\",\r\n    \"        reconstructed_activations = autoencoder.decode(latent_activations, info)\\n\",\r\n    \"    return latent_activations, reconstructed_activations\\n\",\r\n    \"\\n\",\r\n    \"# 计算误差并打印结果\\n\",\r\n    \"def calculate_normalized_mse(input_tensor, reconstructed_activations):\\n\",\r\n    \"    normalized_mse = (reconstructed_activations - input_tensor).pow(2).sum(dim=1) / (input_tensor).pow(2).sum(dim=1)\\n\",\r\n    \"    return normalized_mse\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 7,\r\n   \"id\": \"d048903c\",\r\n   \"metadata\": {},\r\n   \"outputs\": [\r\n    {\r\n     \"name\": \"stdout\",\r\n     \"output_type\": \"stream\",\r\n     \"text\": [\r\n      \"Loaded pretrained model gpt2 into HookedTransformer\\n\"\r\n     ]\r\n    }\r\n   ],\r\n   \"source\": [\r\n    \"model, device = load_model(\\\"gpt2\\\")\\n\",\r\n    \"layer_index = 6\\n\",\r\n    \"location = \\\"resid_post_mlp\\\"\\n\",\r\n    \"autoencoder = load_autoencoder(location, layer_index, device)\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 8,\r\n   \"id\": \"02b24c51\",\r\n   \"metadata\": {},\r\n   \"outputs\": [],\r\n   \"source\": [\r\n    \"prompt = \\\"This is an example of a prompt that\\\"\\n\",\r\n    \"tokens_id, tokens_str, activation_cache = process_input(model, prompt)\\n\",\r\n    \"input_tensor = get_activation(activation_cache, layer_index, location)\\n\",\r\n    \"latent_activations, reconstructed_activations = encode_decode(autoencoder, input_tensor)\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 9,\r\n   \"id\": \"c2b2f8aa\",\r\n   \"metadata\": {},\r\n   \"outputs\": [\r\n    {\r\n     \"name\": \"stdout\",\r\n     \"output_type\": \"stream\",\r\n     \"text\": [\r\n      \"torch.Size([9, 32768])\\n\",\r\n      \"torch.Size([9, 768])\\n\",\r\n      \"torch.Size([9, 768])\\n\",\r\n      \"Non-zero activation count: 288\\n\"\r\n     ]\r\n    }\r\n   ],\r\n   \"source\": [\r\n    \"print(latent_activations.shape)\\n\",\r\n    \"print(input_tensor.shape)\\n\",\r\n    \"print(reconstructed_activations.shape)\\n\",\r\n    \"non_zero_count = (latent_activations != 0).sum().item()\\n\",\r\n    \"print(\\\"Non-zero activation count:\\\", non_zero_count)\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 10,\r\n   \"id\": \"13e7c424\",\r\n   \"metadata\": {},\r\n   \"outputs\": [],\r\n   \"source\": [\r\n    \"activations_dict = extract_activations(prompt, tokens_str, latent_activations)\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 11,\r\n   \"id\": \"6543ff98\",\r\n   \"metadata\": {},\r\n   \"outputs\": [],\r\n   \"source\": [\r\n    \"update_json_file(\\\"activation.json\\\", activations_dict)\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 13,\r\n   \"id\": \"524a2327\",\r\n   \"metadata\": {},\r\n   \"outputs\": [\r\n    {\r\n     \"name\": \"stdout\",\r\n     \"output_type\": \"stream\",\r\n     \"text\": [\r\n      \"Total number of activations: 288\\n\"\r\n     ]\r\n    }\r\n   ],\r\n   \"source\": [\r\n    \"filename = \\\"activation.json\\\"\\n\",\r\n    \"activation_count = count_activations(filename)\\n\",\r\n    \"print(f\\\"Total number of activations: {activation_count}\\\")\"\r\n   ]\r\n  }\r\n ],\r\n \"metadata\": {\r\n  \"kernelspec\": {\r\n   \"display_name\": \"Python 3\",\r\n   \"language\": \"python\",\r\n   \"name\": \"python3\"\r\n  },\r\n  \"language_info\": {\r\n   \"codemirror_mode\": {\r\n    \"name\": \"ipython\",\r\n    \"version\": 3\r\n   },\r\n   \"file_extension\": \".py\",\r\n   \"mimetype\": \"text/x-python\",\r\n   \"name\": \"python\",\r\n   \"nbconvert_exporter\": \"python\",\r\n   \"pygments_lexer\": \"ipython3\",\r\n   \"version\": \"3.10.8\"\r\n  }\r\n },\r\n \"nbformat\": 4,\r\n \"nbformat_minor\": 5\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Experiments/MBTI/gpt2_sae_mbti.ipynb b/Experiments/MBTI/gpt2_sae_mbti.ipynb
+--- a/Experiments/MBTI/gpt2_sae_mbti.ipynb	(revision 38e98adb009ce1c2e133fd93824d2193084a4461)
++++ b/Experiments/MBTI/gpt2_sae_mbti.ipynb	(date 1720842843229)
+@@ -4,9 +4,8 @@
+    "cell_type": "code",
+    "id": "3a264bdc49ea2966",
+    "metadata": {
+-    "ExecuteTime": {
+-     "end_time": "2024-07-13T03:02:34.783752Z",
+-     "start_time": "2024-07-13T03:02:34.737204Z"
++    "jupyter": {
++     "is_executing": true
+     }
+    },
+    "source": [
+@@ -18,30 +17,19 @@
+     "import blobfile as bf\n",
+     "import transformer_lens\n",
+     "import sparse_autoencoder\n",
+-    "from experiments.utils import extract_activations, update_json_file, count_activations\n",
+-    "import json"
++    "from experiments.MBTI.utils import extract_activations, update_json_file, count_activations"
+    ],
+-   "outputs": [
+-    {
+-     "ename": "ModuleNotFoundError",
+-     "evalue": "No module named 'blobfile'",
+-     "output_type": "error",
+-     "traceback": [
+-      "\u001B[1;31m---------------------------------------------------------------------------\u001B[0m",
+-      "\u001B[1;31mModuleNotFoundError\u001B[0m                       Traceback (most recent call last)",
+-      "Cell \u001B[1;32mIn[2], line 7\u001B[0m\n\u001B[0;32m      5\u001B[0m \u001B[38;5;66;03m# 导入库\u001B[39;00m\n\u001B[0;32m      6\u001B[0m \u001B[38;5;28;01mimport\u001B[39;00m \u001B[38;5;21;01mtorch\u001B[39;00m\n\u001B[1;32m----> 7\u001B[0m \u001B[38;5;28;01mimport\u001B[39;00m \u001B[38;5;21;01mblobfile\u001B[39;00m \u001B[38;5;28;01mas\u001B[39;00m \u001B[38;5;21;01mbf\u001B[39;00m\n\u001B[0;32m      8\u001B[0m \u001B[38;5;28;01mimport\u001B[39;00m \u001B[38;5;21;01mtransformer_lens\u001B[39;00m\n\u001B[0;32m      9\u001B[0m \u001B[38;5;28;01mimport\u001B[39;00m \u001B[38;5;21;01msparse_autoencoder\u001B[39;00m\n",
+-      "\u001B[1;31mModuleNotFoundError\u001B[0m: No module named 'blobfile'"
+-     ]
+-    }
+-   ],
+-   "execution_count": 2
++   "outputs": [],
++   "execution_count": null
+   },
+   {
+    "cell_type": "code",
+-   "execution_count": 6,
+    "id": "2ae2db09",
+-   "metadata": {},
+-   "outputs": [],
++   "metadata": {
++    "jupyter": {
++     "is_executing": true
++    }
++   },
+    "source": [
+     "# 加载模型\n",
+     "def load_model(model_name, center_writing_weights=False):\n",
+@@ -87,7 +75,9 @@
+     "def calculate_normalized_mse(input_tensor, reconstructed_activations):\n",
+     "    normalized_mse = (reconstructed_activations - input_tensor).pow(2).sum(dim=1) / (input_tensor).pow(2).sum(dim=1)\n",
+     "    return normalized_mse"
+-   ]
++   ],
++   "outputs": [],
++   "execution_count": null
+   },
+   {
+    "cell_type": "code",
+Index: Experiments/MBTI/data_clean.ipynb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n \"cells\": [\r\n  {\r\n   \"metadata\": {\r\n    \"ExecuteTime\": {\r\n     \"end_time\": \"2024-07-13T02:30:50.844232Z\",\r\n     \"start_time\": \"2024-07-13T02:30:50.834973Z\"\r\n    }\r\n   },\r\n   \"cell_type\": \"code\",\r\n   \"source\": [\r\n    \"def clean_post(post):\\n\",\r\n    \"    # Remove URLs\\n\",\r\n    \"    post = re.sub(r'http\\\\S+|www\\\\S+|https\\\\S+', '', post, flags=re.MULTILINE)\\n\",\r\n    \"    # Split posts on '|||'\\n\",\r\n    \"    post_segments = post.split('|||')\\n\",\r\n    \"    # Remove special characters and extra whitespace\\n\",\r\n    \"    cleaned_segments = [re.sub(r'[^A-Za-z0-9\\\\s]', '', segment).strip() for segment in post_segments]\\n\",\r\n    \"    return cleaned_segments\"\r\n   ],\r\n   \"id\": \"75607aeb3b896acf\",\r\n   \"outputs\": [],\r\n   \"execution_count\": 95\r\n  },\r\n  {\r\n   \"metadata\": {\r\n    \"ExecuteTime\": {\r\n     \"end_time\": \"2024-07-13T02:30:54.255147Z\",\r\n     \"start_time\": \"2024-07-13T02:30:51.649314Z\"\r\n    }\r\n   },\r\n   \"cell_type\": \"code\",\r\n   \"source\": [\r\n    \"import pandas as pd\\n\",\r\n    \"import re\\n\",\r\n    \"\\n\",\r\n    \"# Load the dataset\\n\",\r\n    \"file_path = 'dataset/mbti_1.csv' \\n\",\r\n    \"\\n\",\r\n    \"# Attempt to read the file with a different encoding\\n\",\r\n    \"data = pd.read_csv(file_path, encoding='latin1')\\n\",\r\n    \"\\n\",\r\n    \"# Apply the cleaning function to each post\\n\",\r\n    \"data['cleaned_posts'] = data['posts'].apply(clean_post)\\n\",\r\n    \"\\n\",\r\n    \"cleaned_data = data.explode('cleaned_posts')[['cleaned_posts']].reset_index(drop=True)\"\r\n   ],\r\n   \"id\": \"initial_id\",\r\n   \"outputs\": [],\r\n   \"execution_count\": 96\r\n  },\r\n  {\r\n   \"metadata\": {\r\n    \"ExecuteTime\": {\r\n     \"end_time\": \"2024-07-13T02:30:54.936234Z\",\r\n     \"start_time\": \"2024-07-13T02:30:54.258149Z\"\r\n    }\r\n   },\r\n   \"cell_type\": \"code\",\r\n   \"source\": [\r\n    \"# Filter out rows where the cleaned_posts have fewer than 15 words\\n\",\r\n    \"cleaned_data['word_count'] = cleaned_data['cleaned_posts'].apply(lambda x: len(x.split()))\\n\",\r\n    \"filtered_data = cleaned_data[cleaned_data['word_count'] >= 15]\\n\",\r\n    \"\\n\",\r\n    \"# Drop the word_count column as it is no longer needed\\n\",\r\n    \"filtered_data = filtered_data.drop(columns=['word_count'])\"\r\n   ],\r\n   \"id\": \"5d4f32a9c2e03f39\",\r\n   \"outputs\": [],\r\n   \"execution_count\": 97\r\n  },\r\n  {\r\n   \"metadata\": {\r\n    \"ExecuteTime\": {\r\n     \"end_time\": \"2024-07-13T02:31:00.525810Z\",\r\n     \"start_time\": \"2024-07-13T02:31:00.509706Z\"\r\n    }\r\n   },\r\n   \"cell_type\": \"code\",\r\n   \"source\": [\r\n    \"num_rows = filtered_data.shape[0]\\n\",\r\n    \"num_rows\"\r\n   ],\r\n   \"id\": \"3e338859ad92e773\",\r\n   \"outputs\": [\r\n    {\r\n     \"data\": {\r\n      \"text/plain\": [\r\n       \"313344\"\r\n      ]\r\n     },\r\n     \"execution_count\": 98,\r\n     \"metadata\": {},\r\n     \"output_type\": \"execute_result\"\r\n    }\r\n   ],\r\n   \"execution_count\": 98\r\n  },\r\n  {\r\n   \"metadata\": {\r\n    \"ExecuteTime\": {\r\n     \"end_time\": \"2024-07-13T02:17:23.632461Z\",\r\n     \"start_time\": \"2024-07-13T02:17:23.614214Z\"\r\n    }\r\n   },\r\n   \"cell_type\": \"code\",\r\n   \"source\": [\r\n    \"# Select the first 2000 rows of the trimmed data\\n\",\r\n    \"filtered_data = filtered_data.head(2000)\\n\",\r\n    \"# Save the cleaned data to a new CSV file\\n\",\r\n    \"filtered_data.to_csv('dataset/cleaned_mbti.csv', index=False)\"\r\n   ],\r\n   \"id\": \"1d0db0b903f6d8a5\",\r\n   \"outputs\": [],\r\n   \"execution_count\": 92\r\n  }\r\n ],\r\n \"metadata\": {\r\n  \"kernelspec\": {\r\n   \"display_name\": \"Python 3\",\r\n   \"language\": \"python\",\r\n   \"name\": \"python3\"\r\n  },\r\n  \"language_info\": {\r\n   \"codemirror_mode\": {\r\n    \"name\": \"ipython\",\r\n    \"version\": 2\r\n   },\r\n   \"file_extension\": \".py\",\r\n   \"mimetype\": \"text/x-python\",\r\n   \"name\": \"python\",\r\n   \"nbconvert_exporter\": \"python\",\r\n   \"pygments_lexer\": \"ipython2\",\r\n   \"version\": \"2.7.6\"\r\n  }\r\n },\r\n \"nbformat\": 4,\r\n \"nbformat_minor\": 5\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Experiments/MBTI/data_clean.ipynb b/Experiments/MBTI/data_clean.ipynb
+--- a/Experiments/MBTI/data_clean.ipynb	(revision 38e98adb009ce1c2e133fd93824d2193084a4461)
++++ b/Experiments/MBTI/data_clean.ipynb	(date 1720841568417)
+@@ -2,9 +2,8 @@
+  "cells": [
+   {
+    "metadata": {
+-    "ExecuteTime": {
+-     "end_time": "2024-07-13T02:30:50.844232Z",
+-     "start_time": "2024-07-13T02:30:50.834973Z"
++    "jupyter": {
++     "is_executing": true
+     }
+    },
+    "cell_type": "code",
+@@ -20,7 +19,7 @@
+    ],
+    "id": "75607aeb3b896acf",
+    "outputs": [],
+-   "execution_count": 95
++   "execution_count": null
+   },
+   {
+    "metadata": {
+Index: Experiments/MBTI/gpt2_sae_mbti.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Experiments/MBTI/gpt2_sae_mbti.py b/Experiments/MBTI/gpt2_sae_mbti.py
+new file mode 100644
+--- /dev/null	(date 1720845603346)
++++ b/Experiments/MBTI/gpt2_sae_mbti.py	(date 1720845603346)
+@@ -0,0 +1,77 @@
++# 设置环境变量
++import os
++import sys
++
++os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
++# 导入库
++import torch
++import blobfile as bf
++import transformer_lens
++import sparse_autoencoder
++from utils import extract_activations, update_json_file, count_activations
++
++# 加载模型
++def load_model(model_name, center_writing_weights=False):
++    model = transformer_lens.HookedTransformer.from_pretrained(model_name, center_writing_weights=center_writing_weights)
++    device = next(model.parameters()).device
++    return model, device
++
++# 处理输入
++def process_input(model, prompt):
++    tokens_id = model.to_tokens(prompt)  # (1, n_tokens)
++    tokens_str = model.to_str_tokens(prompt)
++    with torch.no_grad():
++        logits, activation_cache = model.run_with_cache(tokens_id, remove_batch_dim=True)
++    return tokens_id, tokens_str, activation_cache
++
++# 提取激活
++def get_activation(activation_cache, layer_index=6, location="resid_post_mlp"):
++    transformer_lens_loc = {
++        "mlp_post_act": f"blocks.{layer_index}.mlp.hook_post",
++        "resid_delta_attn": f"blocks.{layer_index}.hook_attn_out",
++        "resid_post_attn": f"blocks.{layer_index}.hook_resid_mid",
++        "resid_delta_mlp": f"blocks.{layer_index}.hook_mlp_out",
++        "resid_post_mlp": f"blocks.{layer_index}.hook_resid_post",
++    }[location]
++    return activation_cache[transformer_lens_loc]
++
++# 加载自编码器
++def load_autoencoder(location, layer_index, device):
++    with bf.BlobFile(sparse_autoencoder.paths.v5_32k(location, layer_index), mode="rb") as f:
++        state_dict = torch.load(f)
++        autoencoder = sparse_autoencoder.Autoencoder.from_state_dict(state_dict)
++        autoencoder.to(device)
++    return autoencoder
++
++# 编码和解码激活张量
++def encode_decode(autoencoder, input_tensor):
++    with torch.no_grad():
++        latent_activations, info = autoencoder.encode(input_tensor)
++        reconstructed_activations = autoencoder.decode(latent_activations, info)
++    return latent_activations, reconstructed_activations
++
++# 计算误差并打印结果
++def calculate_normalized_mse(input_tensor, reconstructed_activations):
++    normalized_mse = (reconstructed_activations - input_tensor).pow(2).sum(dim=1) / (input_tensor).pow(2).sum(dim=1)
++    return normalized_mse
++
++
++if __name__ == "__main__":
++    model, device = load_model("gpt2")
++    layer_index = 6
++    location = "resid_post_mlp"
++    autoencoder = load_autoencoder(location, layer_index, device)
++    prompt = "This is an example of a prompt that"
++    tokens_id, tokens_str, activation_cache = process_input(model, prompt)
++    input_tensor = get_activation(activation_cache, layer_index, location)
++    latent_activations, reconstructed_activations = encode_decode(autoencoder, input_tensor)
++    print(latent_activations.shape)
++    print(input_tensor.shape)
++    print(reconstructed_activations.shape)
++    non_zero_count = (latent_activations != 0).sum().item()
++    print("Non-zero activation count:", non_zero_count)
++    activations_dict = extract_activations(prompt, tokens_str, latent_activations)
++    update_json_file("activation.json", activations_dict)
++    filename = "activation.json"
++    activation_count = count_activations(filename)
++    print(f"Total number of activations: {activation_count}")
+\ No newline at end of file
+Index: Experiments/MBTI/utils.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Experiments/MBTI/utils.py b/Experiments/MBTI/utils.py
+new file mode 100644
+--- /dev/null	(date 1720842843235)
++++ b/Experiments/MBTI/utils.py	(date 1720842843235)
+@@ -0,0 +1,70 @@
++import json
++import torch
++def extract_activations(prompt, tokens, latent_activations, top_k=32):
++    activations_dict = {}
++    prompt_key = prompt  # 根据需要设置不同的 prompt 标识符
++
++    # 遍历所有 feature
++    for feature_index in range(latent_activations.shape[1]):
++        # 获取该 feature 的所有激活值
++        feature_activations = latent_activations[:, feature_index]
++
++        # 仅提取 top k 非零激活值
++        non_zero_activations = feature_activations[feature_activations != 0]
++        if non_zero_activations.numel() == 0:
++            continue
++
++        top_k_values, top_k_indices = torch.topk(non_zero_activations, min(top_k, non_zero_activations.numel()))
++
++        # 构建特征激活字典
++        feature_key = f"Feature {feature_index}"
++        activations_dict[feature_key] = {prompt_key: {}}
++
++        for value, index in zip(top_k_values, top_k_indices):
++            token_index = (feature_activations == value).nonzero(as_tuple=True)[0].item()
++            token = tokens[token_index]
++            activations_dict[feature_key][prompt_key][f"{token}"] = value.item()
++
++    return activations_dict
++
++
++def update_json_file(filename, new_activations):
++    # 尝试读取现有的 JSON 文件
++    try:
++        with open(filename, "r") as json_file:
++            activations_dict = json.load(json_file)
++    except FileNotFoundError:
++        activations_dict = {}
++
++    # 合并新激活值到现有字典中
++    for new_feature_key, new_feature_data in new_activations.items():
++        if new_feature_key not in activations_dict:
++            activations_dict[new_feature_key] = new_feature_data
++        else:
++            for new_prompt_key, new_prompt_data in new_feature_data.items():
++                if new_prompt_key not in activations_dict[new_feature_key]:
++                    activations_dict[new_feature_key][new_prompt_key] = new_feature_data[new_prompt_key]
++                else:
++                    activations_dict[new_feature_key][new_prompt_key].update(new_feature_data[new_prompt_key])
++
++    # 保存更新后的字典到 JSON 文件
++    with open(filename, "w") as json_file:
++        json.dump(activations_dict, json_file, indent=4)
++
++
++def count_activations(filename):
++    try:
++        with open(filename, "r") as json_file:
++            activations_dict = json.load(json_file)
++    except FileNotFoundError:
++        print(f"File {filename} not found.")
++        return 0
++
++    activation_count = 0
++
++    # 遍历 JSON 结构，统计激活值的数量
++    for feature_key, feature_data in activations_dict.items():
++        for prompt_key, prompt_data in feature_data.items():
++            activation_count += len(prompt_data)
++
++    return activation_count
+\ No newline at end of file
+Index: .idea/jupyter-settings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"JupyterPersistentConnectionParameters\">\r\n    <option name=\"moduleParameters\">\r\n      <map>\r\n        <entry key=\"$PROJECT_DIR$/.idea/sparse_autoencoder.iml\">\r\n          <value>\r\n            <JupyterConnectionParameters>\r\n              <option name=\"managed\" value=\"true\" />\r\n              <option name=\"sdkName\" value=\"Remote Python 3.10.8 (sftp://root@connect.cqa1.seetacloud.com:23293/root/miniconda3/bin/python3)\" />\r\n            </JupyterConnectionParameters>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"$PROJECT_DIR$/../../Xujie Si/KAN &amp;SATNet/KANtoSAT/.idea/KANtoSAT.iml\">\r\n          <value>\r\n            <JupyterConnectionParameters>\r\n              <option name=\"managed\" value=\"true\" />\r\n              <option name=\"sdkHomePath\" value=\"D:\\Tool\\Anaconda\\envs\\KANtoSAT\\python.exe\" />\r\n            </JupyterConnectionParameters>\r\n          </value>\r\n        </entry>\r\n        <entry key=\"$PROJECT_DIR$/../../Xujie Si/KAN &amp;SATNet/KANtoSAT/KANtoSAT/.idea/KANtoSAT.iml\">\r\n          <value>\r\n            <JupyterConnectionParameters>\r\n              <option name=\"managed\" value=\"true\" />\r\n              <option name=\"sdkHomePath\" value=\"D:\\Tool\\Anaconda\\envs\\KANtoSAT\\python.exe\" />\r\n            </JupyterConnectionParameters>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jupyter-settings.xml b/.idea/jupyter-settings.xml
+--- a/.idea/jupyter-settings.xml	(revision 38e98adb009ce1c2e133fd93824d2193084a4461)
++++ b/.idea/jupyter-settings.xml	(date 1720841666705)
+@@ -7,7 +7,7 @@
+           <value>
+             <JupyterConnectionParameters>
+               <option name="managed" value="true" />
+-              <option name="sdkName" value="Remote Python 3.10.8 (sftp://root@connect.cqa1.seetacloud.com:23293/root/miniconda3/bin/python3)" />
++              <option name="sdkName" value="" />
+             </JupyterConnectionParameters>
+           </value>
+         </entry>
+Index: .idea/deployment.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"PublishConfigData\" autoUpload=\"Always\" serverName=\"root@connect.cqa1.seetacloud.com:23293 password\" remoteFilesAllowedToDisappearOnAutoupload=\"false\">\r\n    <serverData>\r\n      <paths name=\"root@connect.cqa1.seetacloud.com:23293 password\">\r\n        <serverdata>\r\n          <mappings>\r\n            <mapping deploy=\"/tmp/pycharm_project_437\" local=\"$PROJECT_DIR$\" />\r\n          </mappings>\r\n        </serverdata>\r\n      </paths>\r\n      <paths name=\"root@connect.cqa1.seetacloud.com:23293 password (2)\">\r\n        <serverdata>\r\n          <mappings>\r\n            <mapping deploy=\"/tmp/pycharm_project_778\" local=\"$PROJECT_DIR$\" />\r\n          </mappings>\r\n        </serverdata>\r\n      </paths>\r\n      <paths name=\"root@connect.cqa1.seetacloud.com:23293 password (3)\">\r\n        <serverdata>\r\n          <mappings>\r\n            <mapping deploy=\"/tmp/pycharm_project_214\" local=\"$PROJECT_DIR$\" />\r\n          </mappings>\r\n        </serverdata>\r\n      </paths>\r\n      <paths name=\"root@connect.cqa1.seetacloud.com:26056 password\">\r\n        <serverdata>\r\n          <mappings>\r\n            <mapping deploy=\"/tmp/pycharm_project_123\" local=\"$PROJECT_DIR$\" />\r\n          </mappings>\r\n        </serverdata>\r\n      </paths>\r\n      <paths name=\"root@connect.cqa1.seetacloud.com:30216 password\">\r\n        <serverdata>\r\n          <mappings>\r\n            <mapping deploy=\"/tmp/pycharm_project_949\" local=\"$PROJECT_DIR$\" />\r\n          </mappings>\r\n        </serverdata>\r\n      </paths>\r\n    </serverData>\r\n    <option name=\"myAutoUpload\" value=\"ALWAYS\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deployment.xml b/.idea/deployment.xml
+--- a/.idea/deployment.xml	(revision 38e98adb009ce1c2e133fd93824d2193084a4461)
++++ b/.idea/deployment.xml	(date 1720844966421)
+@@ -1,39 +1,13 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="PublishConfigData" autoUpload="Always" serverName="root@connect.cqa1.seetacloud.com:23293 password" remoteFilesAllowedToDisappearOnAutoupload="false">
++  <component name="PublishConfigData" autoUpload="Always" serverName="root@connect.cqa1.seetacloud.com:23293 password (3)" remoteFilesAllowedToDisappearOnAutoupload="false" confirmBeforeUploading="false">
++    <option name="confirmBeforeUploading" value="false" />
+     <serverData>
+-      <paths name="root@connect.cqa1.seetacloud.com:23293 password">
+-        <serverdata>
+-          <mappings>
+-            <mapping deploy="/tmp/pycharm_project_437" local="$PROJECT_DIR$" />
+-          </mappings>
+-        </serverdata>
+-      </paths>
+-      <paths name="root@connect.cqa1.seetacloud.com:23293 password (2)">
+-        <serverdata>
+-          <mappings>
+-            <mapping deploy="/tmp/pycharm_project_778" local="$PROJECT_DIR$" />
+-          </mappings>
+-        </serverdata>
+-      </paths>
+       <paths name="root@connect.cqa1.seetacloud.com:23293 password (3)">
+         <serverdata>
+           <mappings>
+-            <mapping deploy="/tmp/pycharm_project_214" local="$PROJECT_DIR$" />
+-          </mappings>
+-        </serverdata>
+-      </paths>
+-      <paths name="root@connect.cqa1.seetacloud.com:26056 password">
+-        <serverdata>
+-          <mappings>
+-            <mapping deploy="/tmp/pycharm_project_123" local="$PROJECT_DIR$" />
+-          </mappings>
+-        </serverdata>
+-      </paths>
+-      <paths name="root@connect.cqa1.seetacloud.com:30216 password">
+-        <serverdata>
+-          <mappings>
+-            <mapping deploy="/tmp/pycharm_project_949" local="$PROJECT_DIR$" />
++            <mapping deploy="/tmp/pycharm_project_13" local="$PROJECT_DIR$" />
++            <mapping local="" />
+           </mappings>
+         </serverdata>
+       </paths>

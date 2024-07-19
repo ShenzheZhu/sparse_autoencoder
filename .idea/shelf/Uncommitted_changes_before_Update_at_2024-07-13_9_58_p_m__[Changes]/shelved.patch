@@ -1,0 +1,65 @@
+Index: experiments/MBTI/gpt2_sae_mbti.ipynb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n \"cells\": [\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"id\": \"3a264bdc49ea2966\",\r\n   \"metadata\": {\r\n    \"jupyter\": {\r\n     \"is_executing\": true\r\n    }\r\n   },\r\n   \"source\": [\r\n    \"# 设置环境变量\\n\",\r\n    \"import os\\n\",\r\n    \"os.environ[\\\"HF_ENDPOINT\\\"] = \\\"https://hf-mirror.com\\\"\\n\",\r\n    \"# 导入库\\n\",\r\n    \"import torch\\n\",\r\n    \"import blobfile as bf\\n\",\r\n    \"import transformer_lens\\n\",\r\n    \"import sparse_autoencoder\\n\",\r\n    \"from experiments.MBTI.utils import extract_activations, update_json_file, count_activations\"\r\n   ],\r\n   \"outputs\": [],\r\n   \"execution_count\": null\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"id\": \"2ae2db09\",\r\n   \"metadata\": {\r\n    \"jupyter\": {\r\n     \"is_executing\": true\r\n    }\r\n   },\r\n   \"source\": [\r\n    \"# 加载模型\\n\",\r\n    \"def load_model(model_name, center_writing_weights=False):\\n\",\r\n    \"    model = transformer_lens.HookedTransformer.from_pretrained(model_name, center_writing_weights=center_writing_weights)\\n\",\r\n    \"    device = next(model.parameters()).device\\n\",\r\n    \"    return model, device\\n\",\r\n    \"\\n\",\r\n    \"# 处理输入\\n\",\r\n    \"def process_input(model, prompt):\\n\",\r\n    \"    tokens_id = model.to_tokens(prompt)  # (1, n_tokens)\\n\",\r\n    \"    tokens_str = model.to_str_tokens(prompt)\\n\",\r\n    \"    with torch.no_grad():\\n\",\r\n    \"        logits, activation_cache = model.run_with_cache(tokens_id, remove_batch_dim=True)\\n\",\r\n    \"    return tokens_id, tokens_str, activation_cache\\n\",\r\n    \"\\n\",\r\n    \"# 提取激活\\n\",\r\n    \"def get_activation(activation_cache, layer_index=6, location=\\\"resid_post_mlp\\\"):\\n\",\r\n    \"    transformer_lens_loc = {\\n\",\r\n    \"        \\\"mlp_post_act\\\": f\\\"blocks.{layer_index}.mlp.hook_post\\\",\\n\",\r\n    \"        \\\"resid_delta_attn\\\": f\\\"blocks.{layer_index}.hook_attn_out\\\",\\n\",\r\n    \"        \\\"resid_post_attn\\\": f\\\"blocks.{layer_index}.hook_resid_mid\\\",\\n\",\r\n    \"        \\\"resid_delta_mlp\\\": f\\\"blocks.{layer_index}.hook_mlp_out\\\",\\n\",\r\n    \"        \\\"resid_post_mlp\\\": f\\\"blocks.{layer_index}.hook_resid_post\\\",\\n\",\r\n    \"    }[location]\\n\",\r\n    \"    return activation_cache[transformer_lens_loc]\\n\",\r\n    \"\\n\",\r\n    \"# 加载自编码器\\n\",\r\n    \"def load_autoencoder(location, layer_index, device):\\n\",\r\n    \"    with bf.BlobFile(sparse_autoencoder.paths.v5_32k(location, layer_index), mode=\\\"rb\\\") as f:\\n\",\r\n    \"        state_dict = torch.load(f)\\n\",\r\n    \"        autoencoder = sparse_autoencoder.Autoencoder.from_state_dict(state_dict)\\n\",\r\n    \"        autoencoder.to(device)\\n\",\r\n    \"    return autoencoder\\n\",\r\n    \"\\n\",\r\n    \"# 编码和解码激活张量\\n\",\r\n    \"def encode_decode(autoencoder, input_tensor):\\n\",\r\n    \"    with torch.no_grad():\\n\",\r\n    \"        latent_activations, info = autoencoder.encode(input_tensor)\\n\",\r\n    \"        reconstructed_activations = autoencoder.decode(latent_activations, info)\\n\",\r\n    \"    return latent_activations, reconstructed_activations\\n\",\r\n    \"\\n\",\r\n    \"# 计算误差并打印结果\\n\",\r\n    \"def calculate_normalized_mse(input_tensor, reconstructed_activations):\\n\",\r\n    \"    normalized_mse = (reconstructed_activations - input_tensor).pow(2).sum(dim=1) / (input_tensor).pow(2).sum(dim=1)\\n\",\r\n    \"    return normalized_mse\"\r\n   ],\r\n   \"outputs\": [],\r\n   \"execution_count\": null\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 7,\r\n   \"id\": \"d048903c\",\r\n   \"metadata\": {},\r\n   \"outputs\": [\r\n    {\r\n     \"name\": \"stdout\",\r\n     \"output_type\": \"stream\",\r\n     \"text\": [\r\n      \"Loaded pretrained model gpt2 into HookedTransformer\\n\"\r\n     ]\r\n    }\r\n   ],\r\n   \"source\": [\r\n    \"model, device = load_model(\\\"gpt2\\\")\\n\",\r\n    \"layer_index = 6\\n\",\r\n    \"location = \\\"resid_post_mlp\\\"\\n\",\r\n    \"autoencoder = load_autoencoder(location, layer_index, device)\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 8,\r\n   \"id\": \"02b24c51\",\r\n   \"metadata\": {},\r\n   \"outputs\": [],\r\n   \"source\": [\r\n    \"prompt = \\\"This is an example of a prompt that\\\"\\n\",\r\n    \"tokens_id, tokens_str, activation_cache = process_input(model, prompt)\\n\",\r\n    \"input_tensor = get_activation(activation_cache, layer_index, location)\\n\",\r\n    \"latent_activations, reconstructed_activations = encode_decode(autoencoder, input_tensor)\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 9,\r\n   \"id\": \"c2b2f8aa\",\r\n   \"metadata\": {},\r\n   \"outputs\": [\r\n    {\r\n     \"name\": \"stdout\",\r\n     \"output_type\": \"stream\",\r\n     \"text\": [\r\n      \"torch.Size([9, 32768])\\n\",\r\n      \"torch.Size([9, 768])\\n\",\r\n      \"torch.Size([9, 768])\\n\",\r\n      \"Non-zero activation count: 288\\n\"\r\n     ]\r\n    }\r\n   ],\r\n   \"source\": [\r\n    \"print(latent_activations.shape)\\n\",\r\n    \"print(input_tensor.shape)\\n\",\r\n    \"print(reconstructed_activations.shape)\\n\",\r\n    \"non_zero_count = (latent_activations != 0).sum().item()\\n\",\r\n    \"print(\\\"Non-zero activation count:\\\", non_zero_count)\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 10,\r\n   \"id\": \"13e7c424\",\r\n   \"metadata\": {},\r\n   \"outputs\": [],\r\n   \"source\": [\r\n    \"activations_dict = extract_activations(prompt, tokens_str, latent_activations)\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 11,\r\n   \"id\": \"6543ff98\",\r\n   \"metadata\": {},\r\n   \"outputs\": [],\r\n   \"source\": [\r\n    \"update_json_file(\\\"activation.json\\\", activations_dict)\"\r\n   ]\r\n  },\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"execution_count\": 13,\r\n   \"id\": \"524a2327\",\r\n   \"metadata\": {},\r\n   \"outputs\": [\r\n    {\r\n     \"name\": \"stdout\",\r\n     \"output_type\": \"stream\",\r\n     \"text\": [\r\n      \"Total number of activations: 288\\n\"\r\n     ]\r\n    }\r\n   ],\r\n   \"source\": [\r\n    \"filename = \\\"activation.json\\\"\\n\",\r\n    \"activation_count = count_activations(filename)\\n\",\r\n    \"print(f\\\"Total number of activations: {activation_count}\\\")\"\r\n   ]\r\n  }\r\n ],\r\n \"metadata\": {\r\n  \"kernelspec\": {\r\n   \"display_name\": \"Python 3\",\r\n   \"language\": \"python\",\r\n   \"name\": \"python3\"\r\n  },\r\n  \"language_info\": {\r\n   \"codemirror_mode\": {\r\n    \"name\": \"ipython\",\r\n    \"version\": 3\r\n   },\r\n   \"file_extension\": \".py\",\r\n   \"mimetype\": \"text/x-python\",\r\n   \"name\": \"python\",\r\n   \"nbconvert_exporter\": \"python\",\r\n   \"pygments_lexer\": \"ipython3\",\r\n   \"version\": \"3.10.8\"\r\n  }\r\n },\r\n \"nbformat\": 4,\r\n \"nbformat_minor\": 5\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/experiments/MBTI/gpt2_sae_mbti.ipynb b/experiments/MBTI/gpt2_sae_mbti.ipynb
+--- a/experiments/MBTI/gpt2_sae_mbti.ipynb	(revision 24f4a578bfe3aca04cb5c638b3e6e86ca89fd13a)
++++ b/experiments/MBTI/gpt2_sae_mbti.ipynb	(date 1720922014879)
+@@ -4,8 +4,9 @@
+    "cell_type": "code",
+    "id": "3a264bdc49ea2966",
+    "metadata": {
+-    "jupyter": {
+-     "is_executing": true
++    "ExecuteTime": {
++     "end_time": "2024-07-14T01:53:25.439057Z",
++     "start_time": "2024-07-14T01:53:25.423131Z"
+     }
+    },
+    "source": [
+@@ -17,10 +18,10 @@
+     "import blobfile as bf\n",
+     "import transformer_lens\n",
+     "import sparse_autoencoder\n",
+-    "from experiments.MBTI.utils import extract_activations, update_json_file, count_activations"
++    "from utils import extract_activations, update_json_file, count_activations"
+    ],
+    "outputs": [],
+-   "execution_count": null
++   "execution_count": 2
+   },
+   {
+    "cell_type": "code",
+Index: test.ipynb
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n \"cells\": [\r\n  {\r\n   \"cell_type\": \"code\",\r\n   \"id\": \"initial_id\",\r\n   \"metadata\": {\r\n    \"collapsed\": true,\r\n    \"ExecuteTime\": {\r\n     \"end_time\": \"2024-07-13T02:44:49.456145Z\",\r\n     \"start_time\": \"2024-07-13T02:44:49.417016Z\"\r\n    }\r\n   },\r\n   \"source\": \"print('hello')\",\r\n   \"outputs\": [\r\n    {\r\n     \"name\": \"stdout\",\r\n     \"output_type\": \"stream\",\r\n     \"text\": [\r\n      \"hello\\n\"\r\n     ]\r\n    }\r\n   ],\r\n   \"execution_count\": 2\r\n  },\r\n  {\r\n   \"metadata\": {\r\n    \"ExecuteTime\": {\r\n     \"end_time\": \"2024-07-13T02:45:09.064902Z\",\r\n     \"start_time\": \"2024-07-13T02:45:09.046787Z\"\r\n    }\r\n   },\r\n   \"cell_type\": \"code\",\r\n   \"source\": \"print(10+20+30)\",\r\n   \"id\": \"88ede7241d7ae61e\",\r\n   \"outputs\": [\r\n    {\r\n     \"name\": \"stdout\",\r\n     \"output_type\": \"stream\",\r\n     \"text\": [\r\n      \"60\\n\"\r\n     ]\r\n    }\r\n   ],\r\n   \"execution_count\": 3\r\n  },\r\n  {\r\n   \"metadata\": {},\r\n   \"cell_type\": \"code\",\r\n   \"outputs\": [],\r\n   \"execution_count\": null,\r\n   \"source\": \"\",\r\n   \"id\": \"76b93a4954d6f82\"\r\n  }\r\n ],\r\n \"metadata\": {\r\n  \"kernelspec\": {\r\n   \"display_name\": \"Python 3\",\r\n   \"language\": \"python\",\r\n   \"name\": \"python3\"\r\n  },\r\n  \"language_info\": {\r\n   \"codemirror_mode\": {\r\n    \"name\": \"ipython\",\r\n    \"version\": 2\r\n   },\r\n   \"file_extension\": \".py\",\r\n   \"mimetype\": \"text/x-python\",\r\n   \"name\": \"python\",\r\n   \"nbconvert_exporter\": \"python\",\r\n   \"pygments_lexer\": \"ipython2\",\r\n   \"version\": \"2.7.6\"\r\n  }\r\n },\r\n \"nbformat\": 4,\r\n \"nbformat_minor\": 5\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/test.ipynb b/test.ipynb
+--- a/test.ipynb	(revision 24f4a578bfe3aca04cb5c638b3e6e86ca89fd13a)
++++ b/test.ipynb	(date 1720921996665)
+@@ -6,8 +6,8 @@
+    "metadata": {
+     "collapsed": true,
+     "ExecuteTime": {
+-     "end_time": "2024-07-13T02:44:49.456145Z",
+-     "start_time": "2024-07-13T02:44:49.417016Z"
++     "end_time": "2024-07-14T01:52:58.286249Z",
++     "start_time": "2024-07-14T01:52:58.272382Z"
+     }
+    },
+    "source": "print('hello')",
+@@ -20,7 +20,7 @@
+      ]
+     }
+    ],
+-   "execution_count": 2
++   "execution_count": 1
+   },
+   {
+    "metadata": {

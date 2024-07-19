@@ -1,8 +1,10 @@
 import json
 import os
+import re
 from decimal import Decimal
 
 import ijson
+import pandas as pd
 import torch
 
 
@@ -65,6 +67,63 @@ def update_json_file(filename, new_activations):
     # 保存更新后的字典到 JSON 文件
     with open(filename, "w") as json_file:
         json.dump(activations_dict, json_file, indent=4, default=decimal_default)
+
+def update_csv_file(filename, new_activations):
+    # 尝试读取现有的 CSV 文件
+    try:
+        df = pd.read_csv(filename)
+    except FileNotFoundError:
+        df = pd.DataFrame(columns=['Feature', 'Index', 'SubIndex', 'Value'])
+
+    # 将新的激活值转换为数据帧
+    new_data = {
+        'Feature': [],
+        'Index': [],
+        'SubIndex': [],
+        'Value': []
+    }
+
+    for new_feature_key, new_feature_data in new_activations.items():
+        for new_prompt_key, new_prompt_data in new_feature_data.items():
+            for sub_index, value in new_prompt_data.items():
+                new_data['Feature'].append(new_feature_key)
+                new_data['Index'].append(int(new_prompt_key))
+                new_data['SubIndex'].append(sub_index)
+                new_data['Value'].append(value)
+
+    new_df = pd.DataFrame(new_data)
+    # 删除空值或全为NA值的列
+    new_df.dropna(axis=1, how='all', inplace=True)
+    # 合并新的数据帧到现有的数据帧中
+    updated_df = pd.concat([df, new_df], ignore_index=True)
+    # 删除重复项，保留最新值
+    updated_df.drop_duplicates(subset=['Feature', 'Index', 'SubIndex'], keep='last', inplace=True)
+
+    updated_df.sort_values(by=['Feature', 'Index', 'SubIndex'], inplace=True)
+    # 保存更新后的数据帧到 CSV 文件
+    updated_df.to_csv(filename, index=False)
+
+def extract_feature_number(feature_str):
+    # 提取 feature 字符串中的数字部分
+    match = re.search(r'\d+', feature_str)
+    return int(match.group()) if match else float('inf')
+
+def sort_csv_file(filename):
+    # 尝试读取现有的 CSV 文件
+    try:
+        df = pd.read_csv(filename)
+    except FileNotFoundError:
+        print(f"File {filename} not found.")
+        return
+    # 提取Feature列中的数字部分
+    df['FeatureNumber'] = df['Feature'].apply(extract_feature_number)
+    # 按 FeatureNumber 从小到大排序，然后按 Value 从大到小排序
+    df.sort_values(by=['FeatureNumber', 'Value'], ascending=[True, False], inplace=True)
+    # 删除临时的 FeatureNumber 列
+    df.drop(columns=['FeatureNumber'], inplace=True)
+    # 保存排序后的数据帧到 CSV 文件
+    df.to_csv(filename, index=False)
+    print(f"File {filename} has been sorted and saved.")
 
 
 def count_activations(filename):

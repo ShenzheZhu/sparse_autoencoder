@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b1e82a92-1e79-4c92-b6ba-f84edff19706" name="Changes" comment="updated cleaned_mbti.csv">
+      <change afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_1000.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_1000.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_1000.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_50.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_50.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experiments/MBTI/output/2024-07-18/activations_fi_50.parquet" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/MBTI/data_clean.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/MBTI/data_clean.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/MBTI/exported_data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/MBTI/gpt2_sae_mbti.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/MBTI/gpt2_sae_mbti.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/experiments/MBTI/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/MBTI/utils.py" afterDir="false" />
+    </list>
+    <list id="8e943a86-f133-4efa-8e2f-8251924ca805" name="Changes by zhush" comment="">
+      <change beforePath="$PROJECT_DIR$/experiments/mongodb_config.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/mongodb_config.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/test.ipynb" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="Jupyter Notebook" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="2iAl3RBj0T4X1oXDm3PEisHrNeh" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.example.executor": "Run",
+    "Python.gpt2_sae_mbti.executor": "Run",
+    "Python.test.executor": "Run",
+    "Python.utils.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowPanel.toolwindow.highlight.mappings": "true",
+    "WebServerToolWindowPanel.toolwindow.highlight.symlinks": "true",
+    "WebServerToolWindowPanel.toolwindow.show.date": "false",
+    "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
+    "WebServerToolWindowPanel.toolwindow.show.size": "false",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "database.data.extractors.current.export.id": "Comma-separated (CSV)_id",
+    "last_opened_file_path": "D:/Tool/Anaconda/Scripts/conda.exe",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "CodeWithMe",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\ComputerScience\Research\PRADA\sparse_autoencoder\experiments\MBTI" />
+      <recent name="D:\ComputerScience\Research\PRADA\sparse_autoencoder\Experiments" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.test">
+    <configuration name="gpt2_sae_mbti" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="sparse_autoencoder" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments/MBTI" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/MBTI/gpt2_sae_mbti.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="sparse_autoencoder" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="utils" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="sparse_autoencoder" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Remote Python 3.10.8 (sftp://root@connect.cqa1.seetacloud.com:23293/root/miniconda3/bin/python3)" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/experiments/MBTI" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/experiments/MBTI/utils.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.gpt2_sae_mbti" />
+      <item itemvalue="Python.test" />
+      <item itemvalue="Python.utils" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.gpt2_sae_mbti" />
+        <item itemvalue="Python.utils" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-PY-241.15989.155" />
+        <option value="bundled-python-sdk-babbdf50b680-7c6932dee5e4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.15989.155" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b1e82a92-1e79-4c92-b6ba-f84edff19706" name="Changes" comment="" />
+      <created>1718941064171</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1718941064171</updated>
+      <workItem from="1718941065477" duration="3888000" />
+      <workItem from="1718981893604" duration="19000" />
+      <workItem from="1718995316161" duration="8837000" />
+      <workItem from="1719327291230" duration="33000" />
+      <workItem from="1719327335422" duration="30000" />
+      <workItem from="1720463502175" duration="4783000" />
+      <workItem from="1720469921442" duration="402000" />
+      <workItem from="1720470589867" duration="88000" />
+      <workItem from="1720470806192" duration="109000" />
+      <workItem from="1720489997322" duration="10000" />
+      <workItem from="1720497654679" duration="725000" />
+      <workItem from="1720833421931" duration="6876000" />
+      <workItem from="1720840798523" duration="105000" />
+      <workItem from="1720840970921" duration="3468000" />
+      <workItem from="1720844487188" duration="1292000" />
+      <workItem from="1720920125341" duration="759000" />
+      <workItem from="1720920906087" duration="3456000" />
+      <workItem from="1720924443938" duration="12976000" />
+      <workItem from="1721311284458" duration="1416000" />
+      <workItem from="1721314433704" duration="7191000" />
+      <workItem from="1721328726621" duration="2509000" />
+    </task>
+    <task id="LOCAL-00001" summary="updated activation extract to json format">
+      <option name="closed" value="true" />
+      <created>1720498560270</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1720498560270</updated>
+    </task>
+    <task id="LOCAL-00002" summary="updated cleaned_mbti.csv">
+      <option name="closed" value="true" />
+      <created>1720840454920</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1720840454920</updated>
+    </task>
+    <task id="LOCAL-00003" summary="updated cleaned_mbti.csv">
+      <option name="closed" value="true" />
+      <created>1720976563281</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1720976563282</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="updated activation extract to json format" />
+    <MESSAGE value="updated cleaned_mbti.csv" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated cleaned_mbti.csv" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/sparse_autoencoder$example.coverage" NAME="example Coverage Results" MODIFIED="1720470833865" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/sparse_autoencoder$test.coverage" NAME="test Coverage Results" MODIFIED="1721330032727" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/sparse_autoencoder$gpt2_sae_mbti.coverage" NAME="gpt2_sae_mbti Coverage Results" MODIFIED="1720845615597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/MBTI" />
+    <SUITE FILE_PATH="coverage/sparse_autoencoder$utils.coverage" NAME="utils Coverage Results" MODIFIED="1720843340122" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/experiments/MBTI" />
+  </component>
+</project>
