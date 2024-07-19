@@ -4,33 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b1e82a92-1e79-4c92-b6ba-f84edff19706" name="Changes" comment="updated cleaned_mbti.csv">
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/Generate_Prompts.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000/decision_feeling.parquet" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000/decision_thinking.parquet" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000/energy_extraversion.parquet" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000/energy_introversion.parquet" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000/execution_judging.parquet" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000/execution_perceiving.parquet" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000/information_intuition.parquet" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000/information_sensing.parquet" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/raw/en_decision_feeling.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/raw/en_decision_thinking.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/raw/en_energy_extraversion.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/raw/en_energy_introversion.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/raw/en_execution_judging.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/raw/en_execution_perceiving.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/raw/en_information_intuition.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/raw/en_information_sensing.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/gpt2_sae_mbti.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-18/decision_feeling_1000_activation.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-18/decision_thinking_1000_activation.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/MBTI/dataset/mbti_1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/MBTI/dataset/mbti_1.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/MBTI/gpt2_sae_mbti.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/experiments/MBTI/gpt2_sae_mbti.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/MBTI/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/experiments/mongodb_config.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/MBTI/mongodb_config.ipynb" afterDir="false" />
-    </list>
+    <list default="true" id="b1e82a92-1e79-4c92-b6ba-f84edff19706" name="Changes" comment="updated cleaned_mbti.csv" />
     <list id="8e943a86-f133-4efa-8e2f-8251924ca805" name="Changes by zhush" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,7 +215,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720976563282</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="updated cleaned_mbti.csv">
+      <option name="closed" value="true" />
+      <created>1721395485601</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1721395485601</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
