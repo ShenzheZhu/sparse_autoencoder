@@ -4,7 +4,56 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b1e82a92-1e79-4c92-b6ba-f84edff19706" name="Changes" comment="updated cleaned_mbti.csv" />
+    <list default="true" id="b1e82a92-1e79-4c92-b6ba-f84edff19706" name="Changes" comment="updated cleaned_mbti.csv">
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/Generate_Prompts_pro.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro/decision_feeling.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro/decision_thinking.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro/energy_extraversion.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro/energy_introversion.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro/execution_judging.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro/execution_perceiving.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro/information_intuition.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro/information_sensing.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro_2/decision_feeling.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro_2/decision_thinking.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro_2/energy_extraversion.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro_2/energy_introversion.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro_2/execution_judging.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro_2/execution_perceiving.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro_2/information_intuition.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/dataset/prompt_1000_pro_2/information_sensing.parquet" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/gpt2_sae_mbti_128k.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/gpt2_sae_mbti_32k.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-19/decision_feeling_1000_activation_pro.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-19/decision_thinking_1000_activation_pro.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-19/energy_extraversion_1000_activation_pro.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-19/energy_introversion_1000_activation_pro.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-19/execution_judging_1000_activation_pro.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-19/execution_perceiving_1000_activation_pro.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-19/information_intuition_1000_activation_pro.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-19/information_sensing_1000_activation_pro.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-20/decision_feeling_1000_activation_pro_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-20/decision_thinking_1000_activation_pro_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-20/energy_extraversion_1000_activation_pro_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-20/energy_introversion_1000_activation_pro_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-20/execution_judging_1000_activation_pro_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-20/execution_perceiving_1000_activation_pro_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-20/information_intuition_1000_activation_pro_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-20/information_sensing_1000_activation_pro_2.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-21/decision_feeling_1000_activation_pro_2_128k.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-21/decision_thinking_1000_activation_pro_2_128k.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-21/energy_extraversion_1000_activation_pro_2_128k.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-21/energy_introversion_1000_activation_pro_2_128k.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-21/execution_judging_1000_activation_pro_2_128k.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-21/execution_perceiving_1000_activation_pro_2_128k.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-21/information_intuition_1000_activation_pro_2_128k.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Experiments/Machine_mindset/output/2024-07-21/information_sensing_1000_activation_pro_2_128k.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Changes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Changes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024-07-13_9_31_p_m___Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024-07-13_9_31_p_m___Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024-07-13_9_58_p_m___Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024-07-13_9_58_p_m___Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Experiments/Machine_mindset/gpt2_sae_mbti.ipynb" beforeDir="false" />
+    </list>
     <list id="8e943a86-f133-4efa-8e2f-8251924ca805" name="Changes by zhush" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,6 +239,7 @@
       <workItem from="1721311284458" duration="1416000" />
       <workItem from="1721314433704" duration="7191000" />
       <workItem from="1721328726621" duration="3749000" />
+      <workItem from="1721526041647" duration="8613000" />
     </task>
     <task id="LOCAL-00001" summary="updated activation extract to json format">
       <option name="closed" value="true" />
