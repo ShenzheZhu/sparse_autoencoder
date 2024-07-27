@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b1e82a92-1e79-4c92-b6ba-f84edff19706" name="Changes" comment="updated cleaned_mbti.csv">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Experiments/Feature_steering/feature_extract.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Experiments/Feature_steering/gpt2_sae_test.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Experiments/Feature_steering/lm_interaction.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/Feature_steering/lm_interaction.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Experiments/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Experiments/utils.py" afterDir="false" />
     </list>
     <list id="8e943a86-f133-4efa-8e2f-8251924ca805" name="Changes by zhush" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -198,6 +201,7 @@
       <workItem from="1721790618426" duration="139000" />
       <workItem from="1721790800408" duration="8000" />
       <workItem from="1721871386142" duration="28000" />
+      <workItem from="1722009961768" duration="15000" />
     </task>
     <task id="LOCAL-00001" summary="updated activation extract to json format">
       <option name="closed" value="true" />

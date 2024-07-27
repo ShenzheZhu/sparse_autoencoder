@@ -9,6 +9,7 @@ import pandas as pd
 import torch
 import transformer_lens
 import sparse_autoencoder
+from transformers import GPT2LMHeadModel, AutoTokenizer, GPT2Tokenizer
 
 def decimal_default(obj):
     if isinstance(obj, Decimal):
@@ -241,3 +242,24 @@ def extract_activations(prompt, tokens, latent_activations, top_k=32, activation
 
     # Optionally, return the total number of activations
     return activations_dict
+
+# 加载模型
+def load_model_hf(model_name):
+    model = GPT2LMHeadModel.from_pretrained(model_name, output_hidden_states=True)
+    auto_tokenizer = AutoTokenizer.from_pretrained(model_name)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model.to(device)
+    return model, auto_tokenizer, device
+
+# 处理输入
+def process_input_hf(model, tokenizer, prompt):
+    tokens_id = tokenizer(prompt, return_tensors='pt').input_ids.to(model.device)
+    tokens_str = tokenizer.convert_ids_to_tokens(tokens_id[0])
+    with torch.no_grad():
+        outputs = model(tokens_id)
+    activation_cache = outputs.hidden_states
+    return tokens_id, tokens_str, activation_cache
+
+
+def get_activation_hf(activation_cache, layer_index=6):
+    return activation_cache[layer_index+1][0]
