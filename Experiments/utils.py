@@ -177,22 +177,27 @@ def get_activation(activation_cache, layer_index=6, location="resid_post_mlp"):
     }[location]
     return activation_cache[transformer_lens_loc]
 
-# 加载自编码器
-def load_autoencoder(location, layer_index, device, size=32):
+def load_autoencoder_from_local(layer_index, device, size=32):
+    save_path = f"model/gpt2_sae/sae_state_{size}k_layer_{layer_index}.pt"  # 本地文件路径
+    state_dict = torch.load(save_path, map_location=device)  # 从本地加载状态字典
+    autoencoder = sparse_autoencoder.Autoencoder.from_state_dict(state_dict)
+    autoencoder.to(device)  # 将模型移到指定的设备
+    return autoencoder
+
+def download_autoencoder(location, layer_index, size=32):
     if size == 32:
-        with bf.BlobFile(sparse_autoencoder.paths.v5_32k(location, layer_index), mode="rb") as f:
-            print(f"current sae:{sparse_autoencoder.paths.v5_32k(location, layer_index)}")
-            state_dict = torch.load(f)
-            autoencoder = sparse_autoencoder.Autoencoder.from_state_dict(state_dict)
-            autoencoder.to(device)
-        return autoencoder
+        path = sparse_autoencoder.paths.v5_32k(location, layer_index)
     else:
-        with bf.BlobFile(sparse_autoencoder.paths.v5_128k(location, layer_index), mode="rb") as f:
-            print(f"current sae:{sparse_autoencoder.paths.v5_128k(location, layer_index)}")
-            state_dict = torch.load(f)
-            autoencoder = sparse_autoencoder.Autoencoder.from_state_dict(state_dict)
-            autoencoder.to(device)
-        return autoencoder
+        path = sparse_autoencoder.paths.v5_128k(location, layer_index)
+    directory = 'model/gpt2_sae'
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+    save_path = f"model/gpt2_sae/sae_state_{size}k_layer_{layer_index}.pt"  # 定义本地保存路径
+    with bf.BlobFile(path, mode="rb") as f:
+        print(f"Downloading SAE from: {path}")
+        state_dict = torch.load(f)
+        torch.save(state_dict, save_path)  # 保存状态字典到本地文件
+        print(f"State dictionary saved to {save_path}")
 
 # 编码和解码激活张量
 def encode_decode(autoencoder, input_tensor):
@@ -262,4 +267,4 @@ def process_input_hf(model, tokenizer, prompt):
 
 
 def get_activation_hf(activation_cache, layer_index=6):
-    return activation_cache[layer_index+1][0]
+    return activation_cache[layer_index][0]
